@@ -7,7 +7,6 @@ from pydantic import BaseModel
 import os
 
 app = FastAPI()
-print(os.curdir)
 model = load_model("bp.keras")
 
 
