@@ -1,0 +1,5 @@
+services:
+  bp_api:
+    image: ausa_bp_api_img
+    ports:
+      - "80:80"
