@@ -17,10 +17,6 @@ logging.basicConfig(format='%(levelname)s - %(asctime)s: %(message)s', datefmt='
 app = FastAPI()
 model = load_model("bp.keras")
 
-os.environ["MONGODB_ATLAS_CLUSTER_URI"] = "mongodb+srv://root:1234@cluster0.nwdo3a7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-os.environ["MONGODB_NAME"] = "ausa_medical_db"
-os.environ["MONGODB_COLLECTION_NAME"] = "medical_info"
-os.environ["LLM_URL"] = "http://127.0.0.1:9000/"
 MONGO_URI = os.getenv("MONGODB_ATLAS_CLUSTER_URI")
 DB_NAME = os.getenv("MONGODB_NAME")
 COLLECTION_NAME = os.getenv("MONGODB_COLLECTION_NAME")
