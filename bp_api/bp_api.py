@@ -19,8 +19,6 @@ logging.basicConfig(format='%(levelname)s - %(asctime)s: %(message)s', datefmt='
 app = FastAPI()
 model = load_model("bp.keras")
 
-
-
 MONGO_URI = os.getenv("MONGODB_ATLAS_CLUSTER_URI")
 DB_NAME = os.getenv("MONGODB_NAME")
 COLLECTION_NAME = os.getenv("MONGODB_COLLECTION_NAME")
@@ -41,7 +39,6 @@ rag_prompt = PromptTemplate.from_template("You are an assistant for question-ans
                                           "pieces of retrieved context to answer the question. If you don't know the "
                                           "answer, just say that you don't know. Use three sentences maximum and keep "
                                           "the answer concise.Question: {question} \nContext: {context}")
-
 
 
 def format_docs(docs):
@@ -69,8 +66,6 @@ async def predict_bp(bp_vitals: BPVitals):
     time_series_data = [bp_vitals.systolic_bp, bp_vitals.diastolic_bp]
     context_data = np.array([context_data], dtype=float)
     time_series_data = np.array(time_series_data, dtype=float).reshape(-1, 14, 2)
-    logging.info(f'Time Series :{time_series_data}')
-    print(f'Context Data:{context_data}')
     results = model.predict(x=[context_data, time_series_data])
     logging.info(f"Results:{results}")
     question = f'The Blood pressure measured for 7 days is Systolic:{results[0][0:7].tolist()} and Diastolic:{results[0][0:14].tolist()}.Is my Blood pressure Bad? If it is bad what actions do you recommend?'
@@ -78,7 +73,9 @@ async def predict_bp(bp_vitals: BPVitals):
     thoughts = chain.invoke(
         {"context": docs, "question": question})
     logging.info(f"Alton {thoughts}")
-    return {"future_systolic_bp": results[0][0:7].tolist(), "future_diastolic_bp": results[0][7:14].tolist(),"thoughts":thoughts}
+    return {"future_systolic_bp": results[0][0:7].tolist(), "future_diastolic_bp": results[0][7:14].tolist(),
+            "thoughts": thoughts}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
