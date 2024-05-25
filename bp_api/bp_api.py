@@ -14,12 +14,12 @@ from pydantic import BaseModel
 from tensorflow.keras.models import load_model
 import logging
 
-load_
+load_dotenv()
 logging.basicConfig(format='%(levelname)s - %(asctime)s: %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 app = FastAPI()
 model = load_model("bp.keras")
 
-load_dotenv()
+
 
 MONGO_URI = os.getenv("MONGODB_ATLAS_CLUSTER_URI")
 DB_NAME = os.getenv("MONGODB_NAME")
