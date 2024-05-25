@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms.llamafile import Llamafile
@@ -13,9 +14,12 @@ from pydantic import BaseModel
 from tensorflow.keras.models import load_model
 import logging
 
+load_
 logging.basicConfig(format='%(levelname)s - %(asctime)s: %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 app = FastAPI()
 model = load_model("bp.keras")
+
+load_dotenv()
 
 MONGO_URI = os.getenv("MONGODB_ATLAS_CLUSTER_URI")
 DB_NAME = os.getenv("MONGODB_NAME")
