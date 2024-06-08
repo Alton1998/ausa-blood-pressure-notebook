@@ -4,27 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ipykernel = "*"
-jupyter = "*"
 numpy = "*"
-matplotlib = "*"
-seaborn = "*"
-tensorflow = "*"
+tensorflowjs = "*"
 fastapi = "*"
-keras = "*"
 uvicorn = "*"
 langchain = "*"
-openai = "*"
 python-dotenv = "*"
 pypdf = "*"
 pymongo = "*"
-langchain-openai = "*"
 tiktoken = "*"
 langchain-community = "*"
-gpt4all = "*"
 sentence-transformers = "*"
 
+
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.12"

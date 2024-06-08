@@ -4,4 +4,7 @@
     <option name="sdkName" value="Pipenv (ausa-blood-pressure-notebook)" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Pipenv (ausa-blood-pressure-notebook)" project-jdk-type="Python SDK" />
+  <component name="PyCharmProfessionalAdvertiser">
+    <option name="shown" value="true" />
+  </component>
 </project>
