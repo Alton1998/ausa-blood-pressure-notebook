@@ -1,7 +1,7 @@
 const tf = require('@tensorflow/tfjs'); // Core TensorFlow.js library
 
 async function loadModel() {
-  const modelPath = 'C:\Users\dsouz\University Notes\Projects\ausa-blood-pressure-notebook\bp_api\bp\content\bp\model.json'; // Replace with actual path
+  const modelPath = 'https://raw.githubusercontent.com/Alton1998/ausa-blood-pressure-notebook/main/bp_api/bp/content/bp/model.json'; // Replace with actual path
 
   try {
     const model = await tf.loadLayersModel(modelPath); // Uses FileSystem IOHandler
