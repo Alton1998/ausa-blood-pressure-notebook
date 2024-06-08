@@ -15,7 +15,11 @@ from tensorflow.keras.models import load_model
 import logging
 
 load_dotenv()
-logging.basicConfig(format='%(levelname)s - %(asctime)s: %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
+logging.basicConfig(
+    format="%(levelname)s - %(asctime)s: %(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.INFO,
+)
 app = FastAPI()
 model = load_model("bp.keras")
 
@@ -30,15 +34,17 @@ vector_search = MongoDBAtlasVectorSearch.from_connection_string(
     MONGO_URI,
     DB_NAME + "." + COLLECTION_NAME,
     embeddings,
-    index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME
+    index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
 )
 
 llm = Llamafile()
 llm.base_url = os.getenv("LLM_URL")
-rag_prompt = PromptTemplate.from_template("You are an assistant for question-answering tasks. Use the following "
-                                          "pieces of retrieved context to answer the question. If you don't know the "
-                                          "answer, just say that you don't know. Use three sentences maximum and keep "
-                                          "the answer concise.Question: {question} \nContext: {context}")
+rag_prompt = PromptTemplate.from_template(
+    "You are an assistant for question-answering tasks. Use the following "
+    "pieces of retrieved context to answer the question. If you don't know the "
+    "answer, just say that you don't know. Use three sentences maximum and keep "
+    "the answer concise.Question: {question} \nContext: {context}"
+)
 
 
 def format_docs(docs):
@@ -46,10 +52,11 @@ def format_docs(docs):
 
 
 chain = (
-        RunnablePassthrough.assign(context=RunnablePick("context") | format_docs)
-        | rag_prompt
-        | llm
-        | StrOutputParser())
+    RunnablePassthrough.assign(context=RunnablePick("context") | format_docs)
+    | rag_prompt
+    | llm
+    | StrOutputParser()
+)
 
 
 class BPVitals(BaseModel):
@@ -68,13 +75,15 @@ async def predict_bp(bp_vitals: BPVitals):
     time_series_data = np.array(time_series_data, dtype=float).reshape(-1, 14, 2)
     results = model.predict(x=[context_data, time_series_data])
     logging.info(f"Results:{results}")
-    question = f'The Blood pressure measured for 7 days is Systolic:{results[0][0:7].tolist()} and Diastolic:{results[0][0:14].tolist()}.Is my Blood pressure Bad? If it is bad what actions do you recommend?'
+    question = f"The Blood pressure measured for 7 days is Systolic:{results[0][0:7].tolist()} and Diastolic:{results[0][0:14].tolist()}.Is my Blood pressure Bad? If it is bad what actions do you recommend?"
     docs = vector_search.similarity_search(question)
-    thoughts = chain.invoke(
-        {"context": docs, "question": question})
+    thoughts = chain.invoke({"context": docs, "question": question})
     logging.info(f"Alton {thoughts}")
-    return {"future_systolic_bp": results[0][0:7].tolist(), "future_diastolic_bp": results[0][7:14].tolist(),
-            "thoughts": thoughts}
+    return {
+        "future_systolic_bp": results[0][0:7].tolist(),
+        "future_diastolic_bp": results[0][7:14].tolist(),
+        "thoughts": thoughts,
+    }
 
 
 if __name__ == "__main__":
